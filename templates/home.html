@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home &ndash; Faces
+{% endblock %}
+
+{% block main %}
+    <p>Welcome, @{{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h2>Faces 2</h2>
+    </header>
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+    {% block script %}{% endblock %}
+    {% block style %}{% endblock %}
+</body>
+</html>

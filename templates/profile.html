@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.first_name }}'s profile at Faces{% endblock %}
+
+{% block main %}
+    <h4>{{ user.first_name }} {{ user.last_name }}'s profile</h4>
+    {% if user.post_set %}
+        {% for post in user.post_set.all reversed %}
+            <hr>
+            <small>Published by {{ user.first_name }} {{ user.last_name }} @{{ user.username }} on {{ post.date.date }}</small>
+            <p>{{ post.content }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

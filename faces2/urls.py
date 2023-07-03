@@ -21,4 +21,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('auth/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
+    path('create/', views.create_post, name='create_post'),
+    path('@<slug:username>', views.profile, name='profile'),
+    path('@<slug:username>/<slug:identifier>', views.post, name='post'),
 ]

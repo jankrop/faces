@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
-from .forms import PostForm
+from .forms import PostForm, SearchForm
 
 def index(request):
 	if request.user.is_authenticated:
@@ -37,3 +37,15 @@ def post(request, username, identifier):
 	user = get_object_or_404(User, username=username)
 	post_object = get_object_or_404(Post, author=user, identifier=identifier)
 	return render(request, 'post.html', {'post': post_object})
+
+
+def browse(request):
+	matches = []
+	if request.GET:
+		form = SearchForm(request.GET)
+		if form.is_valid():
+			query = form.cleaned_data['query'].lower()
+			matches = User.objects.filter(username__contains=query)
+	form = SearchForm()
+
+	return render(request, 'browse.html', {'form': form, 'matches': matches})

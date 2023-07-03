@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% block style %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
     <header>
-        <h2><a href="{% url 'index' %}">Faces 2</a></h2>
+        <h2><a href="{% url 'index' %}">Faces v2.0 dev</a></h2>
     </header>
     <main>
         {% block main %}{% endblock %}
     </main>
+    <footer>
+        <hr>
+        <small>This is Faces v2.0 development version. Licensed under the GNU General Public License.</small>
+    </footer>
     {% block script %}{% endblock %}
-    {% block style %}{% endblock %}
 </body>
 </html>

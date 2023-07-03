@@ -7,7 +7,11 @@
     {% if user.post_set %}
         {% for post in user.post_set.all reversed %}
             <hr>
-            <small>Published by {{ user.first_name }} {{ user.last_name }} @{{ user.username }} on {{ post.date.date }}</small>
+            <small>
+                Published by
+                <a href="{% url 'profile' user.username %}">{{ user.first_name }} {{ user.last_name }} @{{ user.username }}</a>
+                on {{ post.date.date }}
+            </small>
             <p>{{ post.content }}</p>
         {% endfor %}
     {% endif %}

@@ -24,4 +24,5 @@ urlpatterns = [
     path('create/', views.create_post, name='create_post'),
     path('@<slug:username>', views.profile, name='profile'),
     path('@<slug:username>/<slug:identifier>', views.post, name='post'),
+    path('browse/', views.browse, name='browse'),
 ]

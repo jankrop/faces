@@ -15,12 +15,15 @@ class Post(models.Model):
 	identifier = models.CharField(max_length=2)
 	likes = models.ManyToManyField(User, related_name='liked_posts')
 
+	def __generate_base64_identifier(self):
+		chars = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-'
+		is_unique = False
+		while not is_unique:
+			new_id = choice(chars) + choice(chars)
+			is_unique = not Post.objects.filter(author=self.author, identifier=new_id).exists()
+		return new_id
+
 	def save(self, *args, **kwargs):
 		if not self.identifier:
-			chars = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-'
-			is_unique = False
-			while not is_unique:
-				new_id = choice(chars) + choice(chars)
-				is_unique = not Post.objects.filter(author=self.author, identifier=new_id).exists()
-			self.identifier = new_id
+			self.identifier = self.__generate_base64_identifier()
 		super().save(*args, **kwargs)

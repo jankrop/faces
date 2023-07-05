@@ -13,6 +13,7 @@ class Post(models.Model):
 	date = models.DateTimeField()
 	content = models.TextField()
 	identifier = models.CharField(max_length=2)
+	likes = models.ManyToManyField(User, related_name='liked_posts')
 
 	def save(self, *args, **kwargs):
 		if not self.identifier:

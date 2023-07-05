@@ -1,18 +1,68 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ user.first_name }}'s profile at Faces{% endblock %}
+{% block title %}{{ viewed_user.first_name }}'s profile at Faces{% endblock %}
 
 {% block main %}
-    <h4>{{ user.first_name }} {{ user.last_name }}'s profile</h4>
-    {% if user.post_set %}
-        {% for post in user.post_set.all reversed %}
+    <h4>{{ viewed_user.first_name }} {{ viewed_user.last_name }}'s profile</h4>
+    {% if viewed_user.post_set %}
+        {% for post in viewed_user.post_set.all reversed %}
             <hr>
             <small>
                 Published by
-                <a href="{% url 'profile' user.username %}">{{ user.first_name }} {{ user.last_name }} @{{ user.username }}</a>
+                <a href="{% url 'profile' viewed_user.username %}">{{ viewed_user.first_name }} {{ viewed_user.last_name }} @{{ viewed_user.username }}</a>
                 on {{ post.date.date }}
             </small>
             <p>{{ post.content }}</p>
+            <p>
+                <span id="likes-{{ viewed_user.username }}-{{ post.identifier }}">{{ post.likes.count }}</span> likes
+                <a href="javascript:like_objects['{{ viewed_user }}']['{{ post.identifier }}'].like()" id="like-{{ viewed_user.username }}-{{ post.identifier }}">
+                    {% if post in user.liked_posts.all %}
+                        Liked!
+                    {% else %}
+                        Like
+                    {% endif %}
+                </a>
+            </p>
         {% endfor %}
     {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        class Like {
+            constructor(username, id, likes) {
+                this.username = '{{ viewed_user.username }}'
+                this.id = id;
+                this.likes = likes;
+            }
+
+            like() {
+                $.ajax({
+                    // I had to hardcode the URL to pass the arguments
+                    // I really want to follow DRY, so I made the Like class
+                    url: "/@" + this.username + '/' + this.id + '/like',
+                    success: (response) => {
+                        const likes = $('#likes-' + this.username + '-' + this.id)
+                        if (response.actionType == 'like') {
+                            likes.html(parseInt(likes.html()) + 1)
+                            $('#like-' + this.username + '-' + this.id).html('Liked!')
+                        } else if (response.actionType == 'dislike') {
+                            likes.html(parseInt(likes.html()) - 1)
+                            $('#like-' + this.username + '-' + this.id).html('Like')
+                        }
+                    },
+                    error: (response) => {
+                        console.error('Error while sending like')
+                    }
+                })
+            }
+        }
+        const like_objects = {
+            {{ viewed_user }}: {
+                {% for post in viewed_user.post_set.all %}
+                    {{ post.identifier }}: new Like('{{ viewed_user }}', '{{ post.identifier }}', {{ post.likes.count }})
+                {% endfor %}
+            }
+        }
+    </script>
 {% endblock %}

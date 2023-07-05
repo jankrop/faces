@@ -14,6 +14,7 @@ class Post(models.Model):
 	content = models.TextField()
 	identifier = models.CharField(max_length=2)
 	likes = models.ManyToManyField(User, related_name='liked_posts')
+	comments = models.JSONField(default=list)  # comment format: {author, date, content, likes[], responses[]}
 
 	def __generate_base64_identifier(self):
 		chars = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-'

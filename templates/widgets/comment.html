@@ -1,0 +1,7 @@
+{% load date_filters %}
+
+<small>
+    <a href="{% url 'profile' post.author %}">{{ post.author.first_name }} {{ post.author.last_name }} @{{ post.author.username }}</a>
+    commented on {{ comment.date|from_iso }}:
+</small>
+<p>{{ comment.content }}</p>

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
-from .forms import PostForm, SearchForm
+from .forms import PostForm, SearchForm, CommentForm
 
 def index(request):
 	if request.user.is_authenticated:
@@ -37,7 +37,23 @@ def profile(request, username):
 def post(request, username, identifier):
 	user = get_object_or_404(User, username=username)
 	post_object = get_object_or_404(Post, author=user, identifier=identifier)
-	return render(request, 'post.html', {'post': post_object})
+	if request.method == 'POST':
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = {
+				'author': request.user.username,
+				'date': datetime.utcnow().isoformat(),
+				'content': form.cleaned_data['content'],
+				'likes': [],
+				'responses': [],
+			}
+			post_object.comments.append(comment)
+			post_object.save()
+	else:
+		form = CommentForm()
+
+	comments = post_object.comments
+	return render(request, 'post.html', {'post': post_object, 'form': form, 'comments': comments})
 
 
 @login_required

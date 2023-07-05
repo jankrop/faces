@@ -10,3 +10,7 @@ class PostForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
 	query = forms.CharField(label='Search query', max_length=150)
+
+
+class CommentForm(forms.Form):
+	content = forms.CharField(label='Comment', widget=forms.Textarea)

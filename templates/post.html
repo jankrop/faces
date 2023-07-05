@@ -3,5 +3,20 @@
 {% block title %}Post by @{{ post.author.username }}{% endblock %}
 
 {% block main %}
-    <p>{{ post.content }}</p>
+    {% include 'widgets/post.html' %}
+    <hr>
+    <form method="post" action="{% url 'post' post.author post.identifier %}">
+        {% csrf_token %}
+        {{ form.content.label }} <br>
+        {{ form.content }} <br>
+        <input type="submit">
+    </form>
+    {% for comment in comments %}
+        <hr>
+        {% include 'widgets/comment.html' %}
+    {% empty %}
+        <hr>
+        <p>No comments yet.</p>
+    {% endfor %}
+
 {% endblock %}

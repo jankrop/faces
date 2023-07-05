@@ -1,0 +1,30 @@
+{% load static %}
+
+<small>
+    Published by
+    <a href="{% url 'profile' post.author %}">{{ post.author.first_name }} {{ post.author.last_name }} @{{ post.author.username }}</a>
+    on {{ post.date.date }}
+</small>
+<p>{{ post.content }}</p>
+<p>
+    <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span> likes
+    <a href="javascript:like_objects['{{ post.author }}']['{{ post.identifier }}'].like()" id="like-{{ post.author.username }}-{{ post.identifier }}">
+        {% if post in user.liked_posts.all %}
+            Liked!
+        {% else %}
+            Like
+        {% endif %}
+    </a> |
+    <a href="{% url 'post' post.author post.identifier %}">{{ post.comments|length }} comments</a>
+</p>
+
+<script src="{% static 'js/like.js' %}"></script>
+<script>
+    const like_objects = {
+        {{ post.author }}: {
+            {% for post in post.author.post_set.all %}
+                {{ post.identifier }}: new Like('{{ post.author }}', '{{ post.identifier }}', {{ post.likes.count }})
+            {% endfor %}
+        }
+    }
+</script>

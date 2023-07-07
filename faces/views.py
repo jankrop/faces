@@ -86,11 +86,23 @@ def like(request, username, identifier):
 
 
 @login_required
-def friend(request, username):  # This anarchy is temporary: will add friend requests later
-	user = get_object_or_404(User, username=username)
-	if user.friends.contains(request.user):
-		user.friends.remove(request.user)
-	else:
-		user.friends.add(request.user)
-	user.save()
+def friend(request, username):
+	if username != request.user.username:
+		user = get_object_or_404(User, username=username)
+		if user.friends.contains(request.user):
+			user.friends.remove(request.user)
+		elif user.friend_requests.contains(request.user):
+			user.friend_requests.remove(request.user)
+		else:
+			user.friend_requests.add(request.user)
+		user.save()
 	return HttpResponseRedirect(reverse('profile', args=[username]))
+
+
+@login_required
+def accept_friend_request(request, username):
+	user = request.user.friend_requests.get(username=username)
+	request.user.friend_requests.remove(user)
+	request.user.friends.add(user)
+	request.user.save()
+	return HttpResponseRedirect(reverse('index'))

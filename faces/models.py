@@ -4,7 +4,8 @@ from random import choice
 
 
 class User(AbstractUser):
-	friends = models.ManyToManyField('self', blank=True)
+	friend_requests = models.ManyToManyField('self', symmetrical=False)
+	friends = models.ManyToManyField('self')
 
 	def __str__(self):
 		return self.username

@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
+{% load user_filters %}
+
 {% block title %}
     Home &ndash; Faces
 {% endblock %}
 
 {% block main %}
     <h4>Welcome, @{{ user.username }}!</h4>
+    {% if user.friend_requests %}
+        <ul>
+            {% for request in user.friend_requests.all %}
+                <li>
+                    Incoming friend request from {{ request|full_name }}
+                    <a href="{% url 'accept_friend_request' request %}">accept</a> <a href="">decline</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <p>
         <a href="{% url 'create_post' %}">create</a>
         <a href="{% url 'browse' %}">browse</a>

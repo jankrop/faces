@@ -24,6 +24,7 @@ urlpatterns = [
     path('create/', views.create_post, name='create_post'),
     path('@<slug:username>', views.profile, name='profile'),
     path('@<slug:username>/friend', views.friend, name='friend'),
+    path('@<slug:username>/accept', views.accept_friend_request, name='accept_friend_request'),
     path('@<slug:username>/<slug:identifier>', views.post, name='post'),
     path('@<slug:username>/<slug:identifier>/like', views.like, name='like'),
     path('browse/', views.browse, name='browse'),

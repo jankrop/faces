@@ -1,14 +1,15 @@
 {% load static %}
+{% load user_filters %}
 
 <small>
-    Published by
-    <a href="{% url 'profile' post.author %}">{{ post.author.first_name }} {{ post.author.last_name }} @{{ post.author.username }}</a>
-    on {{ post.date.date }}
+    Published by {{ post.author|full_name }} on {{ post.date.date }}
+    <a href="{% url 'delete_post' user post.identifier %}">delete</a>
 </small>
 <p>{{ post.content }}</p>
 <p>
     <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span> likes
-    <a href="javascript:like_objects['{{ post.author }}']['{{ post.identifier }}'].like()" id="like-{{ post.author.username }}-{{ post.identifier }}">
+    <a href="javascript:like_objects['{{ post.author }}']['{{ post.identifier }}'].like()"
+       id="like-{{ post.author.username }}-{{ post.identifier }}">
         {% if post in user.liked_posts.all %}
             Liked!
         {% else %}

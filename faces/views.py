@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse, Http404
+from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
@@ -45,8 +45,8 @@ def create_post(request):
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
-			post = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
-			post.save()
+			post_object = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
+			post_object.save()
 			return HttpResponseRedirect(reverse('index'))
 	else:
 		form = PostForm()
@@ -57,8 +57,7 @@ def create_post(request):
 @login_required
 def post(request, username, identifier):
 	"""A view rendering a page with a Post's data, comments and handling the CommentForm form"""
-	user = get_object_or_404(User, username=username)
-	post_object = get_object_or_404(Post, author=user, identifier=identifier)
+	post_object = get_object_or_404(Post, author__username=username, identifier=identifier)
 	if request.method == 'POST':
 		form = CommentForm(request.POST)
 		if form.is_valid():
@@ -84,8 +83,7 @@ def like(request, username, identifier):
 	A view for managing a Post's likes and returning the undertaken action (like or dislike) as a JSON.
 	It should be called using AJAX.
 	"""
-	user = get_object_or_404(User, username=username)
-	post_object = get_object_or_404(Post, author=user, identifier=identifier)
+	post_object = get_object_or_404(Post, author__username=username, identifier=identifier)
 	result = {}
 
 	if post_object.likes.contains(request.user):
@@ -97,6 +95,16 @@ def like(request, username, identifier):
 
 	post_object.save()
 	return JsonResponse(result)
+
+
+@login_required
+def delete_post(request, username, identifier):
+	"""A view for deleting a Post"""
+	if request.user.username == username:
+		get_object_or_404(Post, author__username=username, identifier=identifier).delete()
+		return HttpResponseRedirect(reverse('profile', args=[request.user]))
+	else:
+		return HttpResponseForbidden('You must be the author of a post to delete it.')
 
 
 # FRIEND-RELATED VIEWS

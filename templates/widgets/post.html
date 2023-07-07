@@ -18,7 +18,6 @@
     <a href="{% url 'post' post.author post.identifier %}">{{ post.comments|length }} comments</a>
 </p>
 
-<script src="{% static 'js/like.js' %}"></script>
 <script>
     const like_objects = {
         {{ post.author }}: {

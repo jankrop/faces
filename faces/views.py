@@ -62,7 +62,7 @@ def browse(request):
 	if request.GET:
 		form = SearchForm(request.GET)
 		if form.is_valid():
-			query = form.cleaned_data['query'].lower()
+			query = form.cleaned_data['q'].lower()
 			matches = User.objects.filter(username__contains=query)
 	form = SearchForm()
 	return render(request, 'browse.html', {'form': form, 'matches': matches})
@@ -83,3 +83,14 @@ def like(request, username, identifier):
 
 	post_object.save()
 	return JsonResponse(result)
+
+
+@login_required
+def friend(request, username):  # This anarchy is temporary: will add friend requests later
+	user = get_object_or_404(User, username=username)
+	if user.friends.contains(request.user):
+		user.friends.remove(request.user)
+	else:
+		user.friends.add(request.user)
+	user.save()
+	return HttpResponseRedirect(reverse('profile', args=[username]))

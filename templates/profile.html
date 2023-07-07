@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load query_filters %}
 
 {% block title %}{{ viewed_user.first_name }}'s profile at Faces{% endblock %}
 
 {% block main %}
     <h4>{{ viewed_user.first_name }} {{ viewed_user.last_name }}'s profile</h4>
+    <a href="{% url 'friend' viewed_user %}">
+        {% if user.friends|contains:viewed_user %}
+            End friendship
+        {% else %}
+            Add to friends
+        {% endif %}
+    </a>
     {% if viewed_user.post_set %}
         {% for post in viewed_user.post_set.all reversed %}
             <hr>

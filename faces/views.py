@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
@@ -101,8 +101,18 @@ def friend(request, username):
 
 @login_required
 def accept_friend_request(request, username):
-	user = request.user.friend_requests.get(username=username)
+	try:
+		user = request.user.friend_requests.get(username=username)
+	except User.DoesNotExist:
+		raise Http404
 	request.user.friend_requests.remove(user)
 	request.user.friends.add(user)
 	request.user.save()
+	return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+def decline_friend_request(request, username):
+	user = get_object_or_404(User, username=username)
+	request.user.friend_requests.remove(user)
 	return HttpResponseRedirect(reverse('index'))

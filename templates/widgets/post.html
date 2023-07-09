@@ -4,6 +4,7 @@
 <small>
     Published by {{ post.author|full_name }} on {{ post.date.date }}
     <a href="{% url 'delete_post' user post.identifier %}">delete</a>
+    <a href="{% url 'edit_post' user post.identifier %}">edit</a>
 </small>
 <p>{{ post.content }}</p>
 <p>

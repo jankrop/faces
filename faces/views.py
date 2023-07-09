@@ -107,6 +107,23 @@ def delete_post(request, username, identifier):
 		return HttpResponseForbidden('You must be the author of a post to delete it.')
 
 
+def edit_post(request, username, identifier):
+	"""A view for editing a Post"""
+	if request.user.username == username:
+		post_object = get_object_or_404(Post, author__username=username, identifier=identifier)
+		if request.method == 'POST':
+			form = PostForm(request.POST)
+			if form.is_valid():
+				post_object.content = form.cleaned_data['content']
+			post_object.save()
+			return HttpResponseRedirect(reverse('profile', args=[request.user]))
+		elif request.method == 'GET':
+			form = PostForm(post_object.__dict__)
+			return render(request, 'edit_post.html', {'form': form, 'post': post_object})
+	else:
+		return HttpResponseForbidden('You must be the author of a post to edit it.')
+
+
 # FRIEND-RELATED VIEWS
 
 @login_required

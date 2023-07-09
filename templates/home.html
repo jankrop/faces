@@ -13,7 +13,8 @@
             {% for request in user.friend_requests.all %}
                 <li>
                     Incoming friend request from {{ request|full_name }}
-                    <a href="{% url 'accept_friend_request' request %}">accept</a> <a href="">decline</a>
+                    <a href="{% url 'accept_friend_request' request %}">accept</a>
+                    <a href="{% url 'decline_friend_request' request %}">decline</a>
                 </li>
             {% endfor %}
         </ul>

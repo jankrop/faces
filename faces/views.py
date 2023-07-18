@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
@@ -10,11 +11,11 @@ from .forms import PostForm, SearchForm, CommentForm
 # GENERAL VIEWS
 
 def index(request):
-	"""A view rendering index.html for non-users and home.html for users"""
+	"""A view rendering login.html for non-users and home.html for users"""
 	if request.user.is_authenticated:
 		return render(request, 'home.html', {})
 	else:
-		return render(request, 'index.html', {})
+		return (LoginView.as_view())(request)
 
 
 @login_required

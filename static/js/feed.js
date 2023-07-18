@@ -10,3 +10,12 @@ function getFeed(start, count, target, addButton) {
         }
     })
 }
+
+const batchSize = 10;
+let postsLoaded = 0;
+function getNextPosts() {
+    $('.load-posts-button').remove()
+    getFeed(postsLoaded, batchSize, '#feed');
+    postsLoaded += batchSize;
+}
+getNextPosts();

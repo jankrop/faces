@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden
+from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
@@ -122,6 +122,15 @@ def edit_post(request, username, identifier):
 			return render(request, 'edit_post.html', {'form': form, 'post': post_object})
 	else:
 		return HttpResponseForbidden('You must be the author of a post to edit it.')
+
+
+def get_feed(request):
+	try:
+		start, end = int(request.GET['start']), int(request.GET['end'])
+	except (KeyError, ValueError):
+		return HttpResponseBadRequest('The request must have two integer params: start and end.')
+	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end]
+	return render(request, 'widgets/feed.html', {'posts': posts})
 
 
 # FRIEND-RELATED VIEWS

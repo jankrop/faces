@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load user_filters %}
 
 {% block title %}
@@ -29,4 +30,20 @@
         {% endif %}
         <a href="{% url 'logout' %}">logout</a>
     </p>
+
+    <div id="feed"></div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/feed.js' %}"></script>
+    <script>
+        const batchSize = 10;
+        let postsLoaded = 0;
+        function getNextPosts() {
+            $('.load-posts-button').remove()
+            getFeed(postsLoaded, batchSize, '#feed');
+            postsLoaded += batchSize;
+        }
+        getNextPosts();
+    </script>
 {% endblock %}

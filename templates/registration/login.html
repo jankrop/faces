@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,24 +14,24 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login to Faces</title>
 </head>
-<body class="d-flex align-items-center py-4">
-    {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            Wrong username or password!
-        </div>
-    {% endif %}
-    
-    <form method="post" action="{% url 'login' %}" class="card bg-light p-3 w-100 m-auto" style="max-width: 330px">
-        {% csrf_token %}
-        <img src="{% static 'img/faces.svg' %}" alt="Faces logo">
-        <h3 class="text-center">Log in</h3>
-        {{ form.username.label_tag }} <br>
-        {{ form.username }} <br>
-        {{ form.password.label_tag }} <br>
-        {{ form.password }} <br>
-        <input type="submit" value="Login">
-    </form>
+<body class="d-flex align-items-center py-4 m-2">
+    <div class="m-auto">
+        {% if form.errors %}
+            <div class="alert alert-danger wrong-credentials-alert" role="alert">
+                Wrong username or password!
+            </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}" class="card bg-light p-3" style="max-width: 330px">
+            {% csrf_token %}
+            <img src="{% static 'img/faces.svg' %}" alt="Faces logo" class="w-75 m-auto my-3">
+            <h3 class="text-center">Log in</h3>
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary mt-2">Log in</button>
+        </form>
+    </div>
 </body>
 </html>

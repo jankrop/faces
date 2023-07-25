@@ -10,13 +10,14 @@ class Like {
             // I really want to follow DRY, so I made the Like class
             url: "/@" + this.username + '/' + this.id + '/like',
             success: (response) => {
-                const likes = $('#likes-' + this.username + '-' + this.id)
+                const likes = $('#likes-' + this.username + '-' + this.id);
+                console.log('hello');
                 if (response.actionType == 'like') {
                     likes.html(parseInt(likes.html()) + 1)
-                    $('#like-' + this.username + '-' + this.id).html('<i class="bi bi-star-fill"></i>')
+                    $('#star-' + this.username + '-' + this.id).html('<i class="bi bi-star-fill"></i>')
                 } else if (response.actionType == 'dislike') {
                     likes.html(parseInt(likes.html()) - 1)
-                    $('#like-' + this.username + '-' + this.id).html('<i class="bi bi-star"></i>')
+                    $('#star-' + this.username + '-' + this.id).html('<i class="bi bi-star"></i>')
                 }
             },
             error: (response) => {

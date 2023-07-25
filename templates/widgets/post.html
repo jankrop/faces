@@ -12,16 +12,18 @@
             </a>
         {% endif %}
     </small>
-    <p class="m-0">{{ post.content }}</p>
+    <p class="m-0">{{ post.content|linebreaksbr }}</p>
     <hr class="my-2">
     <div class="m-0 lead">
         <a href="javascript:like_{{ post.identifier }}.like()" class="text-decoration-none me-3"
            id="like-{{ post.author.username }}-{{ post.identifier }}">
-            {% if post in user.liked_posts.all %}
-                <i class="bi bi-star-fill"></i>
-            {% else %}
-                <i class="bi bi-star"></i>
-            {% endif %}
+            <span id="star-{{ post.author.username }}-{{ post.identifier }}">
+                {% if post in user.liked_posts.all %}
+                    <i class="bi bi-star-fill"></i>
+                {% else %}
+                    <i class="bi bi-star"></i>
+                {% endif %}
+            </span>
             <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span>
         </a>
         <a href="{% url 'post' post.author post.identifier %}" class="text-decoration-none">

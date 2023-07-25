@@ -1,0 +1,18 @@
+{% extends 'widgets/modal.html' %}
+
+{% block id %}new-post{% endblock %}
+
+{% block header %}Create a post{% endblock %}
+
+{% block body %}
+    <form method="post" action="{% url 'create_post' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+            <textarea class="form-control" name="content" rows="10"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </div>
+    </form>
+{% endblock %}

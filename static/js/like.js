@@ -11,7 +11,6 @@ class Like {
             url: "/@" + this.username + '/' + this.id + '/like',
             success: (response) => {
                 const likes = $('#likes-' + this.username + '-' + this.id);
-                console.log('hello');
                 if (response.actionType == 'like') {
                     likes.html(parseInt(likes.html()) + 1)
                     $('#star-' + this.username + '-' + this.id).html('<i class="bi bi-star-fill"></i>')

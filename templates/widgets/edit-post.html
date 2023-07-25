@@ -1,0 +1,18 @@
+{% extends 'widgets/modal.html' %}
+
+{% block id %}{{ id }}{% endblock %}
+
+{% block header %}Edit post{% endblock %}
+
+{% block body %}
+    <form method="post" action="{% url 'edit_post' post.author post.identifier %}">
+        {% csrf_token %}
+        <div class="modal-body">
+            <textarea class="form-control" name="content" rows="10">{{ post.content|linebreaksbr }}</textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </div>
+    </form>
+{% endblock %}

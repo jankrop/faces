@@ -43,17 +43,14 @@ def browse(request):
 @login_required
 def create_post(request):
 	"""A view handling the PostForm form"""
-	if request.method == 'POST':
-		form = PostForm(request.POST)
-		if form.is_valid():
-			post_object = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
-			post_object.save()
-			print(post_object.content)
-			return HttpResponseRedirect(reverse('index'))
-	else:
-		form = PostForm()
+	form = PostForm(request.POST)
+	if form.is_valid():
+		post_object = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
+		post_object.save()
+		print(post_object.content)
+		return HttpResponseRedirect(reverse('index'))
 
-	return render(request, 'create_post.html', {'form': form})
+	return HttpResponseRedirect(reverse('profile', args=[request.user.username]))
 
 
 @login_required

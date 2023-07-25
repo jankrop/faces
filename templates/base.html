@@ -34,8 +34,10 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar-menu">
-                <a href="{% url 'create_post' %}" class="btn btn-primary ms-auto">New post</a>
-                <form class="ms-3 w-auto input-group" size="10">
+                <button class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#new-post">
+                    New post
+                </button>
+                <form class="ms-3 w-auto input-group">
                     <input class="form-control">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                 </form>
@@ -58,6 +60,7 @@
     <div class="container col-xxl-6 col-lg-8 mb-3">
         {% block main %}{% endblock %}
     </div>
+    {% include 'widgets/create-post.html' %}
     {% block script %}{% endblock %}
 </body>
 </html>

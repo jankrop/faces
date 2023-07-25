@@ -1,7 +1,9 @@
 {% load date_filters %}
+{% load user_filters %}
 
-<small>
-    <a href="{% url 'profile' post.author %}">{{ post.author.first_name }} {{ post.author.last_name }} @{{ post.author.username }}</a>
-    commented on {{ comment.date|from_iso }}:
-</small>
-<p>{{ comment.content }}</p>
+<div class="card bg-white p-3 m-1">
+    <small>
+        <a href="{% url 'profile' post.author %}">{{ comment.author|full_name }}</a> commented on {{ comment.date|from_iso }}:
+    </small>
+    <p>{{ comment.content|linebreaksbr }}</p>
+</div>

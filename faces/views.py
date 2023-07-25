@@ -69,8 +69,7 @@ def post(request, username, identifier):
 			}
 			post_object.comments.append(comment)
 			post_object.save()
-	else:
-		form = CommentForm()
+	form = CommentForm()
 
 	comments = post_object.comments
 	return render(request, 'post.html', {'post': post_object, 'form': form, 'comments': comments})

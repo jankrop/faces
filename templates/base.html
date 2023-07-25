@@ -17,22 +17,47 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <script src="{% static 'js/like.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
-    <header>
-        <h2><a href="{% url 'index' %}">Faces v2.0 dev</a></h2>
+<body class="bg-body-tertiary">
+    <header class="navbar navbar-expand-md bg-white mb-3 sticky-top shadow-sm">
+        <div class="container-fluid">
+            <a href="{% url 'index' %}" class="navbar-brand">
+                <img src="{% static 'img/faces.svg' %}" alt="Faces logo" height="32">
+            </a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <a href="{% url 'create_post' %}" class="btn btn-primary ms-auto">New post</a>
+                <form class="ms-3 w-auto input-group" size="10">
+                    <input class="form-control">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+                <div class="btn-group ms-3">
+                    <a href="{% url 'profile' user %}" class="btn btn-primary">@{{ user }}</a>
+                    <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Notifications</a></li>
+                        <li><a class="dropdown-item" href="#">Friends</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
-    <main>
+    <div class="container col-xxl-6 col-lg-8 mb-3">
         {% block main %}{% endblock %}
-    </main>
-    <footer>
-        <hr>
-        <small>This is Faces v2.0 development version. Licensed under the <a href="https://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3.0</a>.</small>
-    </footer>
+    </div>
     {% block script %}{% endblock %}
 </body>
 </html>

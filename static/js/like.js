@@ -13,10 +13,10 @@ class Like {
                 const likes = $('#likes-' + this.username + '-' + this.id)
                 if (response.actionType == 'like') {
                     likes.html(parseInt(likes.html()) + 1)
-                    $('#like-' + this.username + '-' + this.id).html('Liked!')
+                    $('#like-' + this.username + '-' + this.id).html('<i class="bi bi-star-fill"></i>')
                 } else if (response.actionType == 'dislike') {
                     likes.html(parseInt(likes.html()) - 1)
-                    $('#like-' + this.username + '-' + this.id).html('Like')
+                    $('#like-' + this.username + '-' + this.id).html('<i class="bi bi-star"></i>')
                 }
             },
             error: (response) => {

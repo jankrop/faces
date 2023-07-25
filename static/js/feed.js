@@ -1,6 +1,8 @@
-const button = '<button class="load-posts-button" onclick="getNextPosts()">More</button>'
+const button = '<button class="btn btn-secondary" onclick="getNextPosts()">More</button>';
+const placeholder = '';
 
 function getFeed(start, count, target, addButton) {
+
     $.ajax({
         url: '/feed?start=' + start + '&end=' + (start + count),
         success: (response) => {

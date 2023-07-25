@@ -1,31 +1,35 @@
 {% load static %}
 {% load user_filters %}
-
-<small>
-    Published by {{ post.author|full_name }} on {{ post.date.date }}
-    <a href="{% url 'delete_post' user post.identifier %}">delete</a>
-    <a href="{% url 'edit_post' user post.identifier %}">edit</a>
-</small>
-<p>{{ post.content }}</p>
-<p>
-    <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span> likes
-    <a href="javascript:like_objects['{{ post.author }}']['{{ post.identifier }}'].like()"
-       id="like-{{ post.author.username }}-{{ post.identifier }}">
-        {% if post in user.liked_posts.all %}
-            Liked!
-        {% else %}
-            Like
+<div class="card bg-white mb-3 p-3">
+    <small>
+        Published by {{ post.author|full_name }} on {{ post.date.date }}
+        {% if user == post.author %}
+            <a href="{% url 'edit_post' user post.identifier %}" class="text-dark text-decoration-none">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="{% url 'delete_post' user post.identifier %}" class="text-dark text-decoration-none">
+                <i class="bi bi-trash-fill"></i>
+            </a>
         {% endif %}
-    </a> |
-    <a href="{% url 'post' post.author post.identifier %}">{{ post.comments|length }} comments</a>
-</p>
+    </small>
+    <p class="m-0">{{ post.content }}</p>
+    <hr class="my-2">
+    <div class="m-0 lead">
+        <a href="javascript:like_{{ post.identifier }}.like()" class="text-decoration-none me-3"
+           id="like-{{ post.author.username }}-{{ post.identifier }}">
+            {% if post in user.liked_posts.all %}
+                <i class="bi bi-star-fill"></i>
+            {% else %}
+                <i class="bi bi-star"></i>
+            {% endif %}
+            <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span>
+        </a>
+        <a href="{% url 'post' post.author post.identifier %}" class="text-decoration-none">
+            <i class="bi bi-chat-square"></i> {{ post.comments|length }}
+        </a>
+    </div>
 
-<script>
-    const like_objects = {
-        {{ post.author }}: {
-            {% for post in post.author.post_set.all %}
-                {{ post.identifier }}: new Like('{{ post.author }}', '{{ post.identifier }}', {{ post.likes.count }})
-            {% endfor %}
-        }
-    }
-</script>
+    <script>
+        let like_{{ post.identifier }} = new Like('{{ post.author }}', '{{ post.identifier }}')
+    </script>
+</div>

@@ -9,28 +9,15 @@
 
 {% block main %}
     <h4>Welcome, @{{ user.username }}!</h4>
-    {% if user.friend_requests %}
-        <ul>
-            {% for request in user.friend_requests.all %}
-                <li>
-                    Incoming friend request from {{ request|full_name }}
-                    <a href="{% url 'accept_friend_request' request %}">accept</a>
-                    <a href="{% url 'decline_friend_request' request %}">decline</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <p>
-        <a href="{% url 'create_post' %}">create</a>
-        <a href="{% url 'browse' %}">browse</a>
-        <a href="{% url 'profile' user.username %}">profile</a>
-        {% if user.is_staff %}
-            <a href="{% url 'admin:index' %}">admin</a>
-        {% endif %}
-        <a href="{% url 'logout' %}">logout</a>
-    </p>
-
+    {% for request in user.friend_requests.all %}
+        <div class="card bg-white p-2">
+            <div>
+                Incoming friend request from {{ request|full_name }}
+                <a class="btn btn-primary px-1 py-0" href="{% url 'accept_friend_request' request %}"><i class="bi bi-check-lg"></i></a>
+                <a class="btn btn-secondary px-1 py-0" href="{% url 'decline_friend_request' request %}"><i class="bi bi-x-lg"></i></a>
+            </div>
+        </div>
+    {% endfor %}
     <div id="feed"></div>
 {% endblock %}
 

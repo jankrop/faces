@@ -106,29 +106,27 @@ def delete_post(request, username, identifier):
 		return HttpResponseForbidden('You must be the author of a post to delete it.')
 
 
+@login_required
 def edit_post(request, username, identifier):
 	"""A view for editing a Post"""
 	if request.user.username == username:
 		post_object = get_object_or_404(Post, author__username=username, identifier=identifier)
-		if request.method == 'POST':
-			form = PostForm(request.POST)
-			if form.is_valid():
-				post_object.content = form.cleaned_data['content']
-			post_object.save()
-			return HttpResponseRedirect(reverse('profile', args=[request.user]))
-		elif request.method == 'GET':
-			form = PostForm(post_object.__dict__)
-			return render(request, 'edit_post.html', {'form': form, 'post': post_object})
+		form = PostForm(request.POST)
+		if form.is_valid():
+			post_object.content = form.cleaned_data['content']
+		post_object.save()
+		return HttpResponseRedirect(reverse('post', args=[username, identifier]))
 	else:
 		return HttpResponseForbidden('You must be the author of a post to edit it.')
 
 
+@login_required
 def get_feed(request):
 	try:
 		start, end = int(request.GET['start']), int(request.GET['end'])
 	except (KeyError, ValueError):
 		return HttpResponseBadRequest('The request must have two integer params: start and end.')
-	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end]
+	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end][::-1]
 	return render(request, 'widgets/feed.html', {'posts': posts})
 
 

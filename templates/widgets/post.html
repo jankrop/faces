@@ -4,7 +4,7 @@
     <small>
         Published by {{ post.author|full_name }} on {{ post.date.date }}
         {% if user == post.author %}
-            <a href="{% url 'edit_post' user post.identifier %}" class="text-dark text-decoration-none">
+            <a class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#edit-{{ post.author }}-{{ post.identifier }}">
                 <i class="bi bi-pencil-square"></i>
             </a>
             <a href="{% url 'delete_post' user post.identifier %}" class="text-dark text-decoration-none">
@@ -34,4 +34,6 @@
     <script>
         let like_{{ post.identifier }} = new Like('{{ post.author }}', '{{ post.identifier }}')
     </script>
+
+    {% include 'widgets/edit-post.html' %}
 </div>

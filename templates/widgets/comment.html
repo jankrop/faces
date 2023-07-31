@@ -7,7 +7,7 @@
     </small>
     <p>{{ comment.content|linebreaksbr }}</p>
     <a href="#replies-{{ comment.identifier }}" data-bs-toggle="collapse" class="text-decoration-none">
-        {{ comment.responses.all|length }} replies
+        <i class="bi bi-reply"></i> {{ comment.responses.all|length }}
     </a>
     <div class="collapse" id="replies-{{ comment.identifier }}">
         <form method="post" action="{% url 'reply' post.author post.identifier comment.identifier %}">

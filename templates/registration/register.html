@@ -1,0 +1,21 @@
+{% extends 'login_base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign in to Faces{% endblock %}
+
+{% block form %}
+    <form method="post" action="{% url 'register' %}" class="card bg-light p-3" style="max-width: 330px">
+        {% csrf_token %}
+        <img src="{% static 'img/faces.svg' %}" alt="Faces logo" class="w-75 m-auto my-3">
+        <h3 class="text-center">Sign in</h3>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary mt-2">Sign in</button>
+    </form>
+    <style>
+        .form-text {
+            display: none;
+        }
+    </style>
+{% endblock %}

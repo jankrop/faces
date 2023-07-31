@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
 from datetime import datetime
 from .models import Post, User
-from .forms import PostForm, SearchForm, CommentForm
+from .forms import PostForm, SearchForm, CommentForm, RegistrationForm
 
 
 # GENERAL VIEWS
@@ -36,6 +37,26 @@ def browse(request):
 			matches = User.objects.filter(username__contains=query)
 	form = SearchForm()
 	return render(request, 'browse.html', {'form': form, 'matches': matches})
+
+
+# ACCOUNT-RELATED VIEWS
+
+def sign_in(request):
+	if request.method == 'POST':
+		form = RegistrationForm(request.POST)
+		if form.is_valid():
+			form.save()
+			user = authenticate(
+				username=form.cleaned_data['username'],
+				password=form.cleaned_data['password1']
+			)
+			login(request, user)
+			return HttpResponseRedirect(reverse('index'))
+	else:
+		form = RegistrationForm()
+
+	return render(request, 'registration/register.html', {'form': form})
+
 
 
 # POST-RELATED VIEWS

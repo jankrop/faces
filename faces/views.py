@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
 from datetime import datetime
-from .models import Post, User
-from .forms import PostForm, SearchForm, CommentForm, RegistrationForm
+from .models import Post, User, Comment
+from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm
 
 
 # GENERAL VIEWS
@@ -58,7 +58,6 @@ def sign_in(request):
 	return render(request, 'registration/register.html', {'form': form})
 
 
-
 # POST-RELATED VIEWS
 
 @login_required
@@ -81,19 +80,16 @@ def post(request, username, identifier):
 	if request.method == 'POST':
 		form = CommentForm(request.POST)
 		if form.is_valid():
-			comment = {
-				'author': request.user.username,
-				'date': datetime.utcnow().isoformat(),
-				'content': form.cleaned_data['content'],
-				'likes': [],
-				'responses': [],
-			}
-			post_object.comments.append(comment)
-			post_object.save()
+			comment = Comment(
+				post=post_object,
+				author=request.user,
+				date=datetime.utcnow(),
+				content=form.cleaned_data['content'],
+			)
+			comment.save()
 	form = CommentForm()
 
-	comments = post_object.comments
-	return render(request, 'post.html', {'post': post_object, 'form': form, 'comments': comments})
+	return render(request, 'post.html', {'post': post_object, 'form': form, 'reply_form': ReplyForm()})
 
 
 @login_required
@@ -148,6 +144,25 @@ def get_feed(request):
 		return HttpResponseBadRequest('The request must have two integer params: start and end.')
 	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end][::-1]
 	return render(request, 'widgets/feed.html', {'posts': posts})
+
+# COMMENT-RELATED VIEWS
+
+
+@login_required
+def reply(request, username, post_id, comment_id):
+	form = ReplyForm(request.POST)
+	if form.is_valid():
+		post_obj = get_object_or_404(Post, author__username=username, identifier=post_id)
+		comment = get_object_or_404(Comment, post=post_obj, identifier=comment_id)
+		reply_obj = Comment(
+			post=post_obj,
+			author=request.user,
+			date=datetime.utcnow(),
+			content=form.cleaned_data['content'],
+			response_to=comment
+		)
+		reply_obj.save()
+	return HttpResponseRedirect(reverse('post', args=[username, post_id]))
 
 
 # FRIEND-RELATED VIEWS

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load query_filters %}
 {% load crispy_forms_tags %}
 
 {% block title %}Post by @{{ post.author.username }}{% endblock %}
@@ -7,28 +8,17 @@
 {% block main %}
     {% include 'widgets/post.html' %}
     <hr>
-    <form method="post" action="{% url 'post' post.author post.identifier %}" class="col-md-8 col-xl-6 m-auto">
+    <form method="post" action="{% url 'post' post.author post.identifier %}">
         {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">Publish</button>
+        {% crispy form %}
     </form>
-    {% if comments %}
-        <div class="row row-cols-2">
-            {% for comment in comments %}
-                <div class="col p-0">
-                    {% include 'widgets/comment.html' %}
-                </div>
-            {% endfor %}
-        </div>
+    {% if post.comments.all %}
+        {% for comment in post.comments|non_reply %}
+            <div class="col p-0">
+                {% include 'widgets/comment.html' %}
+            </div>
+        {% endfor %}
     {% else %}
         <p>No comments yet.</p>
     {% endif %}
-{% endblock %}
-
-{% block style %}
-    <style>
-        textarea {
-            max-height: 4rem;
-        }
-    </style>
 {% endblock %}

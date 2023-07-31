@@ -1,9 +1,27 @@
-{% load date_filters %}
 {% load user_filters %}
+{% load crispy_forms_tags %}
 
-<div class="card bg-white p-3 m-1">
+<div>
     <small>
-        <a href="{% url 'profile' post.author %}">{{ comment.author|full_name }}</a> commented on {{ comment.date|from_iso }}:
+        <a href="{% url 'profile' comment.author %}">{{ comment.author|full_name }}</a> commented on {{ comment.date }}:
     </small>
     <p>{{ comment.content|linebreaksbr }}</p>
+    <a href="#replies-{{ comment.identifier }}" data-bs-toggle="collapse" class="text-decoration-none">
+        {{ comment.responses.all|length }} replies
+    </a>
+    <div class="collapse" id="replies-{{ comment.identifier }}">
+        <form method="post" action="{% url 'reply' post.author post.identifier comment.identifier %}">
+            {% csrf_token %}
+            {% crispy reply_form %}
+        </form>
+        {% for reply in comment.responses.all %}
+            <div class="ms-3">
+                <small>
+                    <a href="{% url 'profile' reply.author %}">{{ reply.author|full_name }}</a> commented on {{ reply.date }}:
+                </small>
+                <p>{{ reply.content|linebreaksbr }}</p>
+            </div>
+        {% endfor %}
+    </div>
 </div>
+<hr>

@@ -1,9 +1,10 @@
 {% load user_filters %}
+{% load date_filters %}
 {% load crispy_forms_tags %}
 
 <div>
     <small>
-        <a href="{% url 'profile' comment.author %}">{{ comment.author|full_name }}</a> commented on {{ comment.date }}:
+        {{ comment.author|full_name }} commented {{ comment.date|from_now }}:
     </small>
     <p>{{ comment.content|linebreaksbr }}</p>
     <a href="javascript:like_{{ post.author }}_{{ post.identifier }}_{{ comment.identifier }}.like()" class="text-decoration-none me-3"

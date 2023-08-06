@@ -1,9 +1,10 @@
 {% load static %}
 {% load user_filters %}
+{% load date_filters %}
 
 <div class="card bg-white mb-3 p-3">
     <small>
-        Published by {{ post.author|full_name }} on {{ post.date.date }}
+        Published by {{ post.author|full_name }} {{ post.date|from_now }}
         {% if user == post.author %}
             <a class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#edit-{{ post.author }}-{{ post.identifier }}">
                 <i class="bi bi-pencil-square"></i>

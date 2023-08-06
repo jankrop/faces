@@ -16,7 +16,7 @@
     <p class="m-0">{{ post.content|linebreaksbr }}</p>
     <hr class="my-2">
     <div class="m-0 lead">
-        <a href="javascript:like_{{ post.identifier }}.like()" class="text-decoration-none me-3"
+        <a href="javascript:like_{{ post.author }}_{{ post.identifier }}.like()" class="text-decoration-none me-3"
            id="like-{{ post.author.username }}-{{ post.identifier }}">
             <span id="star-{{ post.author.username }}-{{ post.identifier }}">
                 {% if post in user.liked_posts.all %}
@@ -28,12 +28,12 @@
             <span id="likes-{{ post.author.username }}-{{ post.identifier }}">{{ post.likes.count }}</span>
         </a>
         <a href="{% url 'post' post.author post.identifier %}" class="text-decoration-none">
-            <i class="bi bi-chat-square"></i> {{ post.comments|length }}
+            <i class="bi bi-chat-square"></i> {{ post.comments.all|length }}
         </a>
     </div>
 
     <script>
-        let like_{{ post.identifier }} = new Like('{{ post.author }}', '{{ post.identifier }}')
+        let like_{{ post.author }}_{{ post.identifier }} = new Like('{{ post.author }}', '{{ post.identifier }}')
     </script>
 
     {% include 'widgets/edit-post.html' %}

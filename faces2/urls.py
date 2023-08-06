@@ -33,5 +33,6 @@ urlpatterns = [
     path('@<slug:username>/<slug:identifier>/delete', views.delete_post, name='delete_post'),
     path('@<slug:username>/<slug:identifier>/edit', views.edit_post, name='edit_post'),
     path('@<slug:username>/<slug:post_id>/<slug:comment_id>/reply', views.reply, name='reply'),
+    path('@<slug:username>/<slug:post_id>/<slug:comment_id>/like', views.like_comment, name='like_comment'),
     path('browse/', views.browse, name='browse'),
 ]

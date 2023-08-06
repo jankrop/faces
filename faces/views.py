@@ -9,6 +9,22 @@ from .models import Post, User, Comment
 from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm
 
 
+# HELPER FUNCTIONS
+
+def perform_like(request, obj):
+	result = {}
+
+	if obj.likes.contains(request.user):
+		obj.likes.remove(request.user)
+		result['actionType'] = 'dislike'
+	else:
+		obj.likes.add(request.user)
+		result['actionType'] = 'like'
+
+	obj.save()
+	return result
+
+
 # GENERAL VIEWS
 
 def index(request):
@@ -99,17 +115,7 @@ def like(request, username, identifier):
 	It should be called using AJAX.
 	"""
 	post_object = get_object_or_404(Post, author__username=username, identifier=identifier)
-	result = {}
-
-	if post_object.likes.contains(request.user):
-		post_object.likes.remove(request.user)
-		result['actionType'] = 'dislike'
-	else:
-		post_object.likes.add(request.user)
-		result['actionType'] = 'like'
-
-	post_object.save()
-	return JsonResponse(result)
+	return JsonResponse(perform_like(request, post_object))
 
 
 @login_required
@@ -145,8 +151,8 @@ def get_feed(request):
 	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end][::-1]
 	return render(request, 'widgets/feed.html', {'posts': posts})
 
-# COMMENT-RELATED VIEWS
 
+# COMMENT-RELATED VIEWS
 
 @login_required
 def reply(request, username, post_id, comment_id):
@@ -163,6 +169,18 @@ def reply(request, username, post_id, comment_id):
 		)
 		reply_obj.save()
 	return HttpResponseRedirect(reverse('post', args=[username, post_id]))
+
+
+@login_required
+def like_comment(request, username, post_id, comment_id):
+	"""
+	A view for managing a Comment's likes and returning the undertaken action (like or dislike) as a JSON.
+	It should be called using AJAX.
+	"""
+	comment_object = get_object_or_404(
+		Comment, post__author__username=username, post__identifier=post_id, identifier=comment_id
+	)
+	return JsonResponse(perform_like(request, comment_object))
 
 
 # FRIEND-RELATED VIEWS

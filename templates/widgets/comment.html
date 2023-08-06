@@ -6,6 +6,17 @@
         <a href="{% url 'profile' comment.author %}">{{ comment.author|full_name }}</a> commented on {{ comment.date }}:
     </small>
     <p>{{ comment.content|linebreaksbr }}</p>
+    <a href="javascript:like_{{ post.author }}_{{ post.identifier }}_{{ comment.identifier }}.like()" class="text-decoration-none me-3"
+       id="like-{{ post.author }}-{{ post.identifier }}-{{ comment.identifier }}">
+        <span id="star-{{ post.author }}-{{ post.identifier }}-{{ comment.identifier }}">
+            {% if comment in user.liked_comments.all %}
+                <i class="bi bi-star-fill"></i>
+            {% else %}
+                <i class="bi bi-star"></i>
+            {% endif %}
+        </span>
+        <span id="likes-{{ post.author.username }}-{{ post.identifier }}-{{ comment.identifier }}">{{ comment.likes.count }}</span>
+    </a>
     <a href="#replies-{{ comment.identifier }}" data-bs-toggle="collapse" class="text-decoration-none">
         <i class="bi bi-reply"></i> {{ comment.responses.all|length }}
     </a>
@@ -20,8 +31,29 @@
                     <a href="{% url 'profile' reply.author %}">{{ reply.author|full_name }}</a> commented on {{ reply.date }}:
                 </small>
                 <p>{{ reply.content|linebreaksbr }}</p>
+                <a href="javascript:like_{{ post.author }}_{{ post.identifier }}_{{ reply.identifier }}.like()" class="text-decoration-none me-3"
+                   id="like-{{ post.author }}-{{ post.identifier }}-{{ reply.identifier }}">
+                    <span id="star-{{ post.author }}-{{ post.identifier }}-{{ reply.identifier }}">
+                        {% if reply in user.liked_comments.all %}
+                            <i class="bi bi-star-fill"></i>
+                        {% else %}
+                            <i class="bi bi-star"></i>
+                        {% endif %}
+                    </span>
+                    <span id="likes-{{ post.author.username }}-{{ post.identifier }}-{{ reply.identifier }}">{{ reply.likes.count }}</span>
+                </a>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<script>
+    let like_{{ post.author }}_{{ post.identifier }}_{{ comment.identifier }} =
+        new CommentLike('{{ post.author }}', '{{ post.identifier }}', '{{ comment.identifier }}')
+    {% for reply in comment.responses.all %}
+        let like_{{ post.author }}_{{ post.identifier }}_{{ reply.identifier }} =
+            new CommentLike('{{ post.author }}', '{{ post.identifier }}', '{{ reply.identifier }}')
+    {% endfor %}
+</script>
+
 <hr>

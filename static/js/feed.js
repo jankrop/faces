@@ -9,6 +9,7 @@ function getFeed(start, count, target, addButton) {
             const targetHandle = $(target);
             targetHandle.append(response);
             if (response) { targetHandle.append(button) }
+            updateTheme();
         }
     })
 }

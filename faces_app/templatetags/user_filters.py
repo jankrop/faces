@@ -3,7 +3,7 @@ from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 register = template.Library()
 
-from faces.models import User
+from faces_app.models import User
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 

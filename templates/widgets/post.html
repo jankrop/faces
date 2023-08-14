@@ -8,10 +8,10 @@
         Published by {{ post.author|full_name }} {{ post.date|from_now }}
         {% if user == post.author %}
             <a class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#edit-{{ post.author }}-{{ post.identifier }}">
-                <i class="bi bi-pencil-square"></i>
+                <i class="bi bi-pencil-square text-body"></i>
             </a>
             <a href="{% url 'delete_post' user post.identifier %}" class="text-dark text-decoration-none">
-                <i class="bi bi-trash-fill"></i>
+                <i class="bi bi-trash-fill text-body"></i>
             </a>
         {% endif %}
     </small>

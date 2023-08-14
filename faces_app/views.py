@@ -83,7 +83,6 @@ def create_post(request):
 	if form.is_valid():
 		post_object = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
 		post_object.save()
-		print(post_object.content)
 		return HttpResponseRedirect(reverse('index'))
 
 	return HttpResponseRedirect(reverse('profile', args=[request.user.username]))

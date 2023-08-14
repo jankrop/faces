@@ -10,4 +10,11 @@ from markdown2 import markdown
 @register.filter('markdown')
 def parse_markdown(value):
 	value = conditional_escape(value).replace('&#x27;', "'").replace('&quot;', '"')
-	return mark_safe(markdown(value, extras=['fenced_code_blocks', 'code_friendly', 'smarty_pants'])[:-1].replace('\n', '<br>'))
+	return mark_safe(markdown(value, extras={
+		'fenced-code-blocks': None,
+		'code-friendly': None,
+		'smarty-pants': None,
+		'html-classes': {
+			'pre': 'bg-body-tertiary border rounded p-3'
+		}
+	}))

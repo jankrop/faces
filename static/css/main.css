@@ -8,3 +8,21 @@ h1, h2, h3, h4, h5, h6 {
 .asteriskField {
     display: none;
 }
+.post-content p {
+    white-space: pre-wrap;
+}
+.post-content *:last-child {
+    margin-bottom: 0;
+}
+.post-content h1 {
+    font-size: 1.75rem;
+}
+.post-content h2, .post-content h3 {
+    font-size: 1.5rem;
+}
+pre {
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-tertiary-bg);
+    padding: 1rem;
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+}

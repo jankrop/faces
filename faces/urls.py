@@ -35,4 +35,5 @@ urlpatterns = [
     path('@<slug:username>/<slug:post_id>/<slug:comment_id>/reply', views.reply, name='reply'),
     path('@<slug:username>/<slug:post_id>/<slug:comment_id>/like', views.like_comment, name='like_comment'),
     path('browse/', views.browse, name='browse'),
+    path('fed/', include('faces_app.fed_urls')),
 ]

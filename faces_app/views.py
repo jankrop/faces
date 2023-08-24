@@ -85,7 +85,7 @@ def create_post(request):
 		post_object.save()
 		return HttpResponseRedirect(reverse('index'))
 
-	return HttpResponseRedirect(reverse('profile', args=[request.user.username]))
+	return HttpResponseRedirect(request.GET.get('path'))
 
 
 @login_required
@@ -136,7 +136,7 @@ def edit_post(request, username, identifier):
 		if form.is_valid():
 			post_object.content = form.cleaned_data['content']
 		post_object.save()
-		return HttpResponseRedirect(reverse('post', args=[username, identifier]))
+		return HttpResponseRedirect(request.GET.get('path'))
 	else:
 		return HttpResponseForbidden('You must be the author of a post to edit it.')
 

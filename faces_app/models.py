@@ -6,6 +6,9 @@ from random import choice
 class Class(models.Model):
 	name = models.CharField(max_length=4)
 
+	def __str__(self):
+		return self.name
+
 
 class User(AbstractUser):
 	friend_requests = models.ManyToManyField('self', symmetrical=False)

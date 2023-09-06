@@ -3,9 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from random import choice
 
 
+class Class(models.Model):
+	name = models.CharField(max_length=4)
+
+
 class User(AbstractUser):
 	friend_requests = models.ManyToManyField('self', symmetrical=False)
 	friends = models.ManyToManyField('self')
+	klass = models.ForeignKey(Class, blank=True, null=True, on_delete=models.SET_NULL)
 
 	def __str__(self):
 		return self.username

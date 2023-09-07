@@ -153,7 +153,7 @@ def get_feed(request):
 		start, end = int(request.GET['start']), int(request.GET['end'])
 	except (KeyError, ValueError):
 		return HttpResponseBadRequest('The request must have two integer params: start and end.')
-	posts = Post.objects.filter(author__in=request.user.friends.all()).reverse()[start:end][::-1]
+	posts = Post.objects.filter(author__in=request.user.friends.all())[::-1][start:end]
 	return render(request, 'widgets/feed.html', {'posts': posts})
 
 

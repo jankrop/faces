@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load user_filters %}
+
+{% block title %}My class{% endblock %}
+
+{% block main %}
+	<p class="display-6">Class {{ classname }}</p>
+    <p class="lead">This class has {{ members|length }} members:</p>
+    {% for member in members %}
+        <p class="lead">{{ member|full_name }}</p>
+    {% endfor %}
+{% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
 from datetime import datetime
-from .models import Post, User, Comment
+from .models import Post, User, Comment, Class
 from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm
 
 
@@ -53,6 +53,12 @@ def browse(request):
 			matches = User.objects.filter(username__contains=query)
 	form = SearchForm()
 	return render(request, 'browse.html', {'form': form, 'matches': matches})
+
+
+def class_list(request, classname):
+	klass = get_object_or_404(Class, name=classname)
+	members = klass.user_set.order_by('last_name')
+	return render(request, 'class.html', {'classname': classname, 'members': members})
 
 
 # ACCOUNT-RELATED VIEWS

@@ -15,7 +15,7 @@
             {% if viewed_user == user %}
                 <span class="badge bg-primary">It's you</span>
             {% else %}
-                <a href="{% url 'friend' viewed_user %}">
+                <a href="{% url 'friend' viewed_user %}" class="btn btn-primary">
                     {% if user.friends|contains:viewed_user %}
                         End friendship
                     {% elif viewed_user.friend_requests|contains:user %}

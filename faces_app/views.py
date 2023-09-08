@@ -209,6 +209,11 @@ def friend(request, username):
 	return HttpResponseRedirect(reverse('profile', args=[username]))
 
 
+def friend_list(request):
+	friends = request.user.friends.all()
+	return render(request, 'friends.html', {'friends': friends})
+
+
 @login_required
 def accept_friend_request(request, username):
 	"""A view for accepting a friend request"""

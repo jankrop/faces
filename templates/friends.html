@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load user_filters %}
+
+{% block title %}My class{% endblock %}
+
+{% block main %}
+	<h4>Your friends</h4>
+    {% if friends %}
+        <p class="lead">You have {{ friends|length }} friend{% if friends|length != 1 %}s{% endif %}:</p>
+        {% for friend in friends %}
+            <p class="lead">{{ friend|full_name }}</p>
+        {% endfor %}
+    {% else %}
+        <p class="lead">You have no friends!</p>
+    {% endif %}
+{% endblock %}

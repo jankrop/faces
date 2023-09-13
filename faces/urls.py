@@ -36,5 +36,6 @@ urlpatterns = [
     path('@<slug:username>/<slug:post_id>/<slug:comment_id>/like', views.like_comment, name='like_comment'),
     path('browse/', views.browse, name='browse'),
     path('class/<slug:classname>', views.class_list, name='class'),
-    path('friends/', views.friend_list, name='friends')
+    path('friends/', views.friend_list, name='friends'),
+    path('interests/', views.change_interests, name='change_interests'),
 ]

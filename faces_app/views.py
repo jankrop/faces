@@ -68,6 +68,7 @@ def sign_in(request):
 		form = RegistrationForm(request.POST)
 		if form.is_valid():
 			form.save()
+			print(form.cleaned_data['interests'])
 			user = authenticate(
 				username=form.cleaned_data['username'],
 				password=form.cleaned_data['password1']
@@ -233,3 +234,12 @@ def decline_friend_request(request, username):
 	user = get_object_or_404(User, username=username)
 	request.user.friend_requests.remove(user)
 	return HttpResponseRedirect(reverse('index'))
+
+
+# INTEREST_RELATED VIEWS
+
+@login_required
+def change_interests(request):
+	request.user.interests = dict(request.POST).get('interests')
+	request.user.save()
+	return HttpResponseRedirect(request.POST.get('path'))

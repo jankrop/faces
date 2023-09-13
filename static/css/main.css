@@ -32,3 +32,9 @@ pre {
     padding: 1rem;
     border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
 }
+.select2-container {
+    z-index: 999999;
+}
+.select2-results, .select2-container {
+    min-width: 200px;
+}

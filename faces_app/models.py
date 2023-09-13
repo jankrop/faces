@@ -11,9 +11,23 @@ class Class(models.Model):
 
 
 class User(AbstractUser):
+	interests_choices = [
+		('coding', 'Coding'),
+		('writing', 'Writing'),
+		('painting', 'Painting'),
+		('photography', 'Photography'),
+		('gaming', 'Gaming'),
+		('reading', 'Reading'),
+		('soccer', 'Soccer'),
+		('technology', 'Technology'),
+		('history', 'History'),
+		('travelling', 'Travelling'),
+	]
+
 	friend_requests = models.ManyToManyField('self', symmetrical=False)
 	friends = models.ManyToManyField('self')
 	klass = models.ForeignKey(Class, blank=True, null=True, on_delete=models.SET_NULL)
+	interests = models.JSONField(default=list, blank=True, null=True)
 
 	def __str__(self):
 		return self.username

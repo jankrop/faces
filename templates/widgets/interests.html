@@ -1,0 +1,49 @@
+{% extends 'widgets/modal.html' %}
+
+{% block id %}interests{% endblock %}
+
+{% block header %}Change interests{% endblock %}
+
+{% block body %}
+	<form method="post" action="{% url 'change_interests' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+            <select class="select2-multiple" name="interests" multiple style="z-index: 999; color: black; min-width: 200px">
+                <!--
+                interests_choices = [
+                    ('coding', 'Coding'),
+                    ('writing', 'Writing'),
+                    ('painting', 'Painting'),
+                    ('photography', 'Photography'),
+                    ('gaming', 'Gaming'),
+                    ('reading', 'Reading'),
+                    ('soccer', 'Soccer'),
+                    ('technology', 'Technology'),
+                    ('history', 'History'),
+                    ('travelling', 'Travelling'),
+                ]
+                -->
+                <option value="coding" {% if 'coding' in user.interests %}selected{% endif %}>Coding</option>
+                <option value="writing" {% if 'writing' in user.interests %}selected{% endif %}>Writing</option>
+                <option value="painting" {% if 'painting' in user.interests %}selected{% endif %}>Painting</option>
+                <option value="photography" {% if 'photography' in user.interests %}selected{% endif %}>Photography</option>
+                <option value="gaming" {% if 'gaming' in user.interests %}selected{% endif %}>Gaming</option>
+                <option value="reading" {% if 'reading' in user.interests %}selected{% endif %}>Reading</option>
+                <option value="soccer" {% if 'soccer' in user.interests %}selected{% endif %}>Soccer</option>
+                <option value="technology" {% if 'technology' in user.interests %}selected{% endif %}>Technology</option>
+                <option value="history" {% if 'history' in user.interests %}selected{% endif %}>History</option>
+                <option value="travelling" {% if 'travelling' in user.interests %}selected{% endif %}>Travelling</option>
+            </select>
+        </div>
+        <input type="hidden" name="path" value="{{ request.path }}">
+        <div class="modal-footer">
+            <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function() {
+            $('.select2-multiple').select2();
+        });
+    </script>
+{% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% load user_filters %}
 
 {% block title %}Browse people on Faces{% endblock %}
 
@@ -13,9 +14,9 @@
     {% if matches %}
         <p>{{ matches|length }} result{% if matches|length != 1 %}s{% endif %} found:</p>
         {% for match in matches %}
-            <a href="{% url 'profile' match.username %}" class="lead">
-                {{ match.first_name }} {{ match.last_name }} @{{ match.username }}
-            </a>
+            <p class="lead"><a href="{% url 'profile' match.username %}">
+                {{ match|full_name }}
+            </a></p>
         {% endfor %}
     {% else %}
         <p>Sorry, no results found.</p>

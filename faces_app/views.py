@@ -4,6 +4,8 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.urls import reverse
+from django.db.models import Q, Value as V
+from django.db.models.functions import Concat
 from datetime import datetime
 from .models import Post, User, Comment, Class
 from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm
@@ -49,8 +51,13 @@ def browse(request):
 	if request.GET:
 		form = SearchForm(request.GET)
 		if form.is_valid():
-			query = form.cleaned_data['q'].lower()
-			matches = User.objects.filter(username__contains=query)
+			query = form.cleaned_data['q']
+			matches = User.objects.annotate(
+				full_name=Concat('first_name', V(' '), 'last_name')
+			).filter(
+				Q(full_name__contains=query) |
+				Q(username__contains=query)
+			)
 	form = SearchForm()
 	return render(request, 'browse.html', {'form': form, 'matches': matches})
 

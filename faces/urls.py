@@ -20,7 +20,8 @@ from faces_app import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/register/', views.sign_in, name='register'),
+    # path('accounts/register/', views.sign_in, name='register'),
+    path('accounts/username_change/', views.change_username, name='username_change'),
     path('admin/', admin.site.urls),
     path('create/', views.create_post, name='create_post'),
     path('feed/', views.get_feed, name='feed'),

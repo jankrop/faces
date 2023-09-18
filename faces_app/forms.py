@@ -36,3 +36,12 @@ class RegistrationForm(UserCreationForm):
 	class Meta:
 		model = User
 		fields = ['first_name', 'last_name', 'username', 'password1', 'password2', 'klass']
+
+
+class UsernameChangeForm(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ['username']
+		labels = {
+			'username': 'New username'
+		}

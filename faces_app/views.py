@@ -8,7 +8,7 @@ from django.db.models import Q, Value as V
 from django.db.models.functions import Concat
 from datetime import datetime
 from .models import Post, User, Comment, Class
-from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm
+from .forms import PostForm, SearchForm, CommentForm, ReplyForm, RegistrationForm, UsernameChangeForm
 
 
 # HELPER FUNCTIONS
@@ -75,7 +75,6 @@ def sign_in(request):
 		form = RegistrationForm(request.POST)
 		if form.is_valid():
 			form.save()
-			print(form.cleaned_data['interests'])
 			user = authenticate(
 				username=form.cleaned_data['username'],
 				password=form.cleaned_data['password1']
@@ -86,6 +85,20 @@ def sign_in(request):
 		form = RegistrationForm()
 
 	return render(request, 'registration/register.html', {'form': form})
+
+
+def change_username(request):
+	if request.method == 'POST':
+		form = UsernameChangeForm(request.POST)
+		if form.is_valid():
+			request.user.username = form.cleaned_data['username']
+			request.user.save()
+			return HttpResponseRedirect(reverse('index'))
+	else:
+		form = UsernameChangeForm()
+
+	return render(request, 'registration/username_change.html', {'form': form})
+
 
 
 # POST-RELATED VIEWS

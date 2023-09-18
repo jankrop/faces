@@ -39,4 +39,5 @@ urlpatterns = [
     path('class/<slug:classname>', views.class_list, name='class'),
     path('friends/', views.friend_list, name='friends'),
     path('interests/', views.change_interests, name='change_interests'),
+    path('settings/', views.settings, name='settings')
 ]

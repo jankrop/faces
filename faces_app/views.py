@@ -68,6 +68,10 @@ def class_list(request, classname):
 	return render(request, 'class.html', {'classname': classname, 'members': members})
 
 
+def settings(request):
+	return render(request, 'settings.html', {})
+
+
 # ACCOUNT-RELATED VIEWS
 
 def sign_in(request):
@@ -98,7 +102,6 @@ def change_username(request):
 		form = UsernameChangeForm()
 
 	return render(request, 'registration/username_change.html', {'form': form})
-
 
 
 # POST-RELATED VIEWS

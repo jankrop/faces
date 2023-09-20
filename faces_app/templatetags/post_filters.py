@@ -22,4 +22,4 @@ def parse_markdown(value):
 
 @register.filter
 def safe_id(value):
-	return value.replace('-', '!')
+	return value.replace('-', '$')

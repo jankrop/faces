@@ -18,3 +18,8 @@ def parse_markdown(value):
 			'pre': 'bg-body-tertiary border rounded p-3'
 		}
 	}))
+
+
+@register.filter
+def safe_id(value):
+	return value.replace('-', '\\')

@@ -1,19 +1,31 @@
 {% extends 'widgets/modal.html' %}
 
+{% load post_filters %}
+
 {% block id %}new-post{% endblock %}
 
-{% block header %}Create a post{% endblock %}
+{% block header %}
+    {% if user|minutes_to_post_unlock < 0 %}
+        Create a post
+    {% else %}
+        Calm down!
+    {% endif %}
+{% endblock %}
 
 {% block body %}
-    <form method="post" action="{% url 'create_post' %}">
-        {% csrf_token %}
-        <div class="modal-body">
-            <textarea class="form-control" name="content" rows="10"></textarea>
-        </div>
-        <input type="hidden" name="path" value="{{ request.path }}">
-        <div class="modal-footer">
-            <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </div>
-    </form>
+    {% if user|minutes_to_post_unlock < 0 %}
+        <form method="post" action="{% url 'create_post' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <textarea class="form-control" name="content" rows="10"></textarea>
+            </div>
+            <input type="hidden" name="path" value="{{ request.path }}">
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+                <button type="submit" class="btn btn-primary">Publish</button>
+            </div>
+        </form>
+    {% else %}
+        <p class="lead m-3">You can post once every 10 minutes.</p>
+    {% endif %}
 {% endblock %}

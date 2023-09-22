@@ -111,7 +111,7 @@ def create_post(request):
 	"""A view handling the PostForm form"""
 	form = PostForm(request.POST)
 	if form.is_valid():
-		post_object = Post(content=form.cleaned_data['content'], author=request.user, date=datetime.utcnow())
+		post_object = Post(content=form.cleaned_data['content'].strip(), author=request.user, date=datetime.utcnow())
 		post_object.save()
 
 	return HttpResponseRedirect(request.POST.get('path'))
@@ -128,7 +128,7 @@ def post(request, username, identifier):
 				post=post_object,
 				author=request.user,
 				date=datetime.utcnow(),
-				content=form.cleaned_data['content'],
+				content=form.cleaned_data['content'].strip(),
 			)
 			comment.save()
 	form = CommentForm()

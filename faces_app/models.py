@@ -58,7 +58,7 @@ class Comment(models.Model):
 	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 	date = models.DateTimeField()
-	content = models.TextField()
+	content = models.TextField(max_length=1024)
 	identifier = models.CharField(max_length=2)
 	likes = models.ManyToManyField(User, related_name='liked_comments')
 	response_to = models.ForeignKey(

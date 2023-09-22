@@ -5,7 +5,7 @@ register = template.Library()
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from markdown2 import markdown
-from datetime import datetime, tzinfo
+from datetime import datetime, timezone
 
 
 @register.filter('markdown')
@@ -24,10 +24,3 @@ def parse_markdown(value):
 @register.filter
 def safe_id(value):
 	return value.replace('-', '$')
-
-
-@register.filter
-def minutes_to_post_unlock(value):
-	if not value.post_set.last(): return -999
-	last_post_date = value.post_set.last().date
-	return 600 - (datetime.now() - last_post_date).seconds // 60
